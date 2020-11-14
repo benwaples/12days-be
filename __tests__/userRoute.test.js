@@ -23,6 +23,24 @@ describe('Auth Routes', () => {
   });
 
   //user cant reuse a username
+  it('should fail to signup a user with an already used username via POST', async() => {
+    const user = {
+      username: 'benwa',
+      password: '1234',
+      avatarUrl: 'hi@url.com',
+      userRole: 'Director of Elf Technologies',
+    };
+
+    await request(app)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .then(res => expect(res.body).toEqual({ id: expect.any(String), username: 'benwa', avatarUrl: 'hi@url.com', userRole: 'Director of Elf Technologies' }));
+
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send(user)
+      .then(res => expect(res.body).toEqual({ message: 'duplicate key value violates unique constraint \"users_username_key\"', status: 500 }));
+  });
 
   it('should authorize a user on login via POST', async() => {
     const user = {
