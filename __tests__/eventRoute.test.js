@@ -37,5 +37,32 @@ describe('event route', () => {
       .get(`/api/v1/events/${insertedEvent.id}`)
       .then(res => expect(res.body).toEqual({ ...event, id: expect.any(String) }));
   });
+
+  it('should return all event via GET', async() => {
+    const events = await Promise.all([
+      {
+        name: 'wal',
+        description: 'walk  the park',
+        image: 'hi@test.com',
+        date: 'YYYY-MM-DD'
+      },
+      {
+        name: 'walk',
+        description: 'walk around the park',
+        image: 'hi@tes.com',
+        date: 'YYYY-MM-DD'
+      },
+      {
+        name: 'wak',
+        description: 'walk around  park',
+        image: 'hi@tes.cm',
+        date: 'YYYY-MM-DD'
+      }
+    ].map(event => Event.insert(event)));
+    
+    return request(app)
+      .get('/api/v1/events')
+      .then(res => expect(res.body.length).toEqual(3));
+  });
 });
 
