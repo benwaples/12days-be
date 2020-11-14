@@ -78,5 +78,18 @@ describe('event route', () => {
       .send({ ...eventToEdit, name: 'a very long walks' })
       .then(res => expect(res.body).toEqual({ ...eventToEdit, name: 'a very long walks' }));
   });
+
+  it('should delete an event by id via DELETE', async() => {
+    const eventToDelete = await Event.insert({
+      name: 'wal',
+      description: 'walk  the park',
+      image: 'hi@test.com',
+      date: 'YYYY-MM-DD'
+    });
+
+    return request(app)
+      .delete(`/api/v1/events/${eventToDelete.id}`)
+      .then(res => expect(res.body).toEqual(eventToDelete));
+  });
 });
 
