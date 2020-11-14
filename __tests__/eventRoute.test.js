@@ -64,5 +64,19 @@ describe('event route', () => {
       .get('/api/v1/events')
       .then(res => expect(res.body.length).toEqual(3));
   });
+
+  it('should update an event', async() => {
+    const eventToEdit = await Event.insert({
+      name: 'wal',
+      description: 'walk  the park',
+      image: 'hi@test.com',
+      date: 'YYYY-MM-DD'
+    });
+
+    return request(app)
+      .patch(`/api/v1/events/${eventToEdit.id}`)
+      .send({ ...eventToEdit, name: 'a very long walks' })
+      .then(res => expect(res.body).toEqual({ ...eventToEdit, name: 'a very long walks' }));
+  });
 });
 
