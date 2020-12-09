@@ -20,6 +20,7 @@ CREATE TABLE events (
 
 CREATE TABLE comments (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  event_id TEXT NOT NULL,
   username TEXT NOT NULL,
   department TEXT NOT NULL,
   comment TEXT NOT NULL
